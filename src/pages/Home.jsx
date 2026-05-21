@@ -6,18 +6,26 @@ import Testimonials from "../components/Home/Testimonials";
 import Newsletter from "../components/Home/Newsletter";
 import AboutUs from "../components/Home/AboutUs";
 import Payment from "../components/Home/Payment";
+import Blogs from "../components/Home/Blogs";
+import SpecialOffers from "../components/Home/SpecialOffers";
+import AppDownload from "../components/Home/AppDownload";
+import FAQ from "../components/Home/FAQ";
 
 const Home = () => {
   return (
     <>
       <Hero />
       <ValueProposition />
+      <SpecialOffers />
+      <AboutUs />
       <ProductCategories />
       <FeaturedProducts />
       <Testimonials />
-      <Newsletter />
-      <AboutUs />
+      <AppDownload />
+      <Blogs />
+      <FAQ />
       <Payment />
+      <Newsletter />
     </>
   );
 };

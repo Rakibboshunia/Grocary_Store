@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ShoppingCart, ArrowRight, MapPin, Phone, Mail } from "lucide-react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import logoImg from "../../assets/images/logo.png";
 
 const Footer = () => {
@@ -12,7 +13,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
           <div className="lg:pr-8">
             <div className="mb-6">
-              <img src={logoImg} alt="DailyBasket" className="h-16 w-auto drop-shadow-md brightness-0 invert" />
+              <Link to="/">
+                <img src={logoImg} alt="DailyBasket" className="h-16 w-auto drop-shadow-md brightness-0 invert" />
+              </Link>
             </div>
             <p className="text-gray-400 leading-relaxed mb-8 font-light">
               We bring the freshest, premium quality groceries right to your doorstep. Experience modern grocery shopping with absolute convenience and trust.
@@ -29,12 +32,18 @@ const Footer = () => {
           <div>
             <h4 className="text-xl font-bold mb-6">Quick Links</h4>
             <ul className="space-y-4 text-gray-400">
-              {["Home", "Shop Catalog", "Special Deals", "About Us", "Contact Info"].map((item) => (
-                <li key={item}>
-                  <a href="#" className="group flex items-center gap-2 hover:text-white transition-colors">
+              {[
+                { name: "Home", href: "/" },
+                { name: "Shop Catalog", href: "/shop" },
+                { name: "Special Deals", href: "/#deals" },
+                { name: "About Us", href: "/#about" },
+                { name: "Contact Info", href: "/#contact" }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link to={item.href} className="group flex items-center gap-2 hover:text-white transition-colors">
                     <ArrowRight size={14} className="text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    <span>{item}</span>
-                  </a>
+                    <span>{item.name}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -43,12 +52,18 @@ const Footer = () => {
           <div>
             <h4 className="text-xl font-bold mb-6">Customer Service</h4>
             <ul className="space-y-4 text-gray-400">
-              {["My Account", "Order Tracking", "Wishlist", "Returns Policy", "FAQ"].map((item) => (
-                <li key={item}>
-                  <a href="#" className="group flex items-center gap-2 hover:text-white transition-colors">
+              {[
+                { name: "My Account", href: "/login" },
+                { name: "Order Tracking", href: "/" },
+                { name: "Cart", href: "/cart" },
+                { name: "Checkout", href: "/checkout" },
+                { name: "FAQ", href: "/#faq" }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link to={item.href} className="group flex items-center gap-2 hover:text-white transition-colors">
                     <ArrowRight size={14} className="text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    <span>{item}</span>
-                  </a>
+                    <span>{item.name}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -67,14 +82,14 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={20} className="text-primary flex-shrink-0" />
-                <span>hello@mrmstore.com</span>
+                <span>hello@dailybasket.com</span>
               </li>
             </ul>
           </div>
         </div>
         
         <div className="border-t border-white/10 pt-8 mt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-500 text-sm font-light">
-          <p>&copy; {new Date().getFullYear()} MRM Store. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} DailyBasket. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Leaf, ShieldCheck, Zap } from "lucide-react";
+import coverImg from "../../assets/images/cover2.jpg";
 
 const Hero = () => {
   return (
@@ -12,7 +13,7 @@ const Hero = () => {
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
-          src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1920" 
+          src={coverImg} 
           alt="Fresh Groceries" 
           className="w-full h-full object-cover opacity-80"
         />

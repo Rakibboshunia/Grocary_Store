@@ -1,12 +1,25 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import fruitsImg from "../../assets/images/Fruits & Vegetables.png";
+import dairyImg from "../../assets/images/Dairy & Eggs.png";
+import meatImg from "../../assets/images/Meat & Seafood.jpg";
+import snacksImg from "../../assets/images/Snacks & Beverages.jpeg";
+import householdImg from "../../assets/images/Household Essentials.png";
+import bakeryImg from "../../assets/images/pexels-jack-sparrow-4199191.jpg";
+import beveragesImg from "../../assets/images/pexels-cokfotokandulu-7420502.jpg";
+import careImg from "../../assets/images/pexels-kampus-8422693.jpg";
+import frozenImg from "../../assets/images/pexels-pixabay-264636.jpg";
 
 const categories = [
-  { name: "Fruits & Veggies", img: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80&w=400", color: "bg-green-100", items: "120+ Items" },
-  { name: "Dairy & Eggs", img: "https://images.unsplash.com/photo-1628088062854-d1870b455389?auto=format&fit=crop&q=80&w=400", color: "bg-orange-100", items: "50+ Items" },
-  { name: "Meat & Seafood", img: "https://images.unsplash.com/photo-1607623814075-e51df1bd682f?auto=format&fit=crop&q=80&w=400", color: "bg-red-100", items: "85+ Items" },
-  { name: "Snacks & Drinks", img: "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?auto=format&fit=crop&q=80&w=400", color: "bg-yellow-100", items: "200+ Items" },
-  { name: "Household", img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&q=80&w=400", color: "bg-blue-100", items: "95+ Items" },
+  { name: "Fruits & Veggies", img: fruitsImg, color: "bg-green-100", items: "120+ Items" },
+  { name: "Dairy & Eggs", img: dairyImg, color: "bg-orange-100", items: "50+ Items" },
+  { name: "Meat & Seafood", img: meatImg, color: "bg-red-100", items: "85+ Items" },
+  { name: "Snacks & Drinks", img: snacksImg, color: "bg-yellow-100", items: "200+ Items" },
+  { name: "Household", img: householdImg, color: "bg-blue-100", items: "95+ Items" },
+  { name: "Bakery & Bread", img: bakeryImg, color: "bg-amber-100", items: "60+ Items" },
+  { name: "Coffee & Tea", img: beveragesImg, color: "bg-orange-50", items: "110+ Items" },
+  { name: "Personal Care", img: careImg, color: "bg-purple-100", items: "150+ Items" },
+  { name: "Frozen Foods", img: frozenImg, color: "bg-cyan-100", items: "80+ Items" },
 ];
 
 const ProductCategories = () => {
@@ -45,15 +58,15 @@ const ProductCategories = () => {
           </motion.a>
         </div>
         
-        <div className="flex overflow-x-auto pb-12 -mx-4 px-4 sm:mx-0 sm:px-0 gap-6 sm:gap-8 snap-x hide-scrollbar">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pb-12">
           {categories.map((category, index) => (
             <motion.div 
               key={index} 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="min-w-[180px] sm:min-w-[220px] flex-shrink-0 snap-start group cursor-pointer"
+              className="w-full group cursor-pointer"
             >
               <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center gap-5 transition-all duration-500 group-hover:shadow-[0_20px_40px_-15px_rgba(46,125,50,0.2)] group-hover:border-primary/20 h-full relative overflow-hidden">
                 
@@ -79,16 +92,6 @@ const ProductCategories = () => {
           ))}
         </div>
       </div>
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}} />
     </section>
   );
 };

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, Leaf, Clock } from "lucide-react";
+import storyImg from "../../assets/images/shop story3.png";
 
 const AboutUs = () => {
   return (
@@ -18,7 +19,7 @@ const AboutUs = () => {
             <div className="absolute inset-0 bg-primary/10 rounded-[3rem] transform rotate-3 group-hover:rotate-0 transition-transform duration-700 ease-in-out"></div>
             
             <img 
-              src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1080" 
+              src={storyImg} 
               alt="Our Story" 
               className="relative z-10 w-full h-[500px] rounded-[3rem] shadow-2xl object-cover border-8 border-white"
             />
