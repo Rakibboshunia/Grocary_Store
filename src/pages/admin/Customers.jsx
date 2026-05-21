@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { Search, Mail, Phone, Edit, Trash2, Plus, X, Users } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const statusOptions = ['Active', 'Inactive', 'New'];
 const emptyForm = { name: '', email: '', phone: '', status: 'New', avatar: '' };
@@ -20,12 +21,6 @@ const AdminCustomers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
-  const [toast, setToast] = useState(null);
-
-  const showToast = (msg, type = 'success') => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   const filtered = customers.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -42,7 +37,7 @@ const AdminCustomers = () => {
   const handleDelete = (id) => {
     if (window.confirm('Delete this customer?')) {
       deleteCustomer(id);
-      showToast('Customer deleted.');
+      toast.success('Customer deleted.');
     }
   };
 
@@ -51,7 +46,7 @@ const AdminCustomers = () => {
     if (editingId) {
       const existing = customers.find(c => c.id === editingId);
       updateCustomer(editingId, { ...existing, ...formData });
-      showToast('Customer updated.');
+      toast.success('Customer updated.');
     } else {
       addCustomer({
         id: `C${Date.now()}`,
@@ -60,20 +55,13 @@ const AdminCustomers = () => {
         spent: 0,
         avatar: formData.avatar || `https://i.pravatar.cc/150?u=${Date.now()}`,
       });
-      showToast('Customer added.');
+      toast.success('Customer added.');
     }
     setIsModalOpen(false);
   };
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Toast */}
-      {toast && (
-        <div className="fixed top-6 right-6 z-[100] px-5 py-3.5 rounded-2xl shadow-xl text-sm font-bold text-white bg-emerald-600 flex items-center gap-2">
-          {toast.msg}
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
         <div className="w-full md:w-auto">

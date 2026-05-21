@@ -1,11 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
-import { products, categories } from '../data/products';
+import { useStore } from '../context/StoreContext';
+import { categories } from '../data/products';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingCart, Star, Grid, List, X, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Shop = () => {
   const { addToCart } = useCart();
+  const { products } = useStore();
 
   // View state
   const [viewMode, setViewMode] = useState('grid');

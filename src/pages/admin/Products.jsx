@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { categories } from '../../data/products';
 import { Plus, Search, Edit2, Trash2, X, Package } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+import imgDefault from '../../assets/images/cover.webp';
 
 const emptyForm = {
   name: '',
   category: categories[0] || 'Fruits & Vegetables',
   price: '',
   inStock: true,
-  image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=400',
+  image: imgDefault,
 };
 
 const AdminProducts = () => {
@@ -17,12 +20,6 @@ const AdminProducts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
-  const [toast, setToast] = useState(null);
-
-  const showToast = (msg, type = 'success') => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,7 +29,7 @@ const AdminProducts = () => {
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       deleteProduct(id);
-      showToast('Product deleted successfully.');
+      toast.success('Product deleted successfully.');
     }
   };
 
@@ -59,7 +56,7 @@ const AdminProducts = () => {
     if (editingId) {
       const existing = products.find(p => p.id === editingId);
       updateProduct(editingId, { ...existing, ...formData, price: Number(formData.price) });
-      showToast('Product updated successfully.');
+      toast.success('Product updated successfully.');
     } else {
       addProduct({
         id: `P${Date.now()}`,
@@ -69,20 +66,13 @@ const AdminProducts = () => {
         reviews: 0,
         badges: ['New'],
       });
-      showToast('Product added successfully.');
+      toast.success('Product added successfully.');
     }
     setIsModalOpen(false);
   };
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Toast */}
-      {toast && (
-        <div className={`fixed top-6 right-6 z-[100] px-5 py-3.5 rounded-2xl shadow-xl text-sm font-bold text-white flex items-center gap-2 transition-all ${toast.type === 'success' ? 'bg-emerald-600' : 'bg-rose-600'}`}>
-          {toast.msg}
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
         <div className="w-full md:w-auto">

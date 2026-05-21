@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoImg from '../assets/images/logo.png';
+import toast from 'react-hot-toast';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -15,6 +17,7 @@ const ForgotPassword = () => {
     setTimeout(() => {
       setIsLoading(false);
       setIsSubmitted(true);
+      toast.success('Reset link sent to your email!');
     }, 1500);
   };
 
@@ -41,7 +44,8 @@ const ForgotPassword = () => {
           </div>
         ) : (
           <div>
-            <div className="mb-8 text-center">
+            <div className="mb-8 text-center flex flex-col items-center">
+              <img src={logoImg} alt="DailyBasket" className="h-12 w-auto drop-shadow-sm mb-4" />
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Forgot Password?</h1>
               <p className="text-gray-500 text-sm">
                 No worries, we'll send you reset instructions.
@@ -69,9 +73,16 @@ const ForgotPassword = () => {
               <button 
                 type="submit" 
                 disabled={isLoading || !email}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl flex items-center justify-center transition-all shadow-md shadow-green-200 hover:shadow-lg"
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-500 text-white font-bold py-3.5 rounded-xl flex items-center justify-center transition-all shadow-md shadow-green-200 hover:shadow-lg"
               >
-                {isLoading ? 'Sending...' : 'Reset Password'}
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Sending...</span>
+                  </div>
+                ) : (
+                  'Reset Password'
+                )}
               </button>
             </form>
 

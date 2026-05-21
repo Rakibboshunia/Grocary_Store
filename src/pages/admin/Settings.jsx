@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Save, Store, Globe, CreditCard, Mail, CheckCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const SETTINGS_KEY = 'store_settings';
 
@@ -18,7 +19,6 @@ const defaultSettings = {
 
 const AdminSettings = () => {
   const [activeTab, setActiveTab] = useState('general');
-  const [saved, setSaved] = useState(false);
   const [settings, setSettings] = useState(() => {
     try {
       const stored = localStorage.getItem(SETTINGS_KEY);
@@ -30,8 +30,7 @@ const AdminSettings = () => {
 
   const handleSave = () => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    toast.success('Settings saved successfully!');
   };
 
   const tabs = [
@@ -43,13 +42,6 @@ const AdminSettings = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Toast */}
-      {saved && (
-        <div className="fixed top-6 right-6 z-[100] px-5 py-3.5 rounded-2xl shadow-xl text-sm font-bold text-white bg-emerald-600 flex items-center gap-2">
-          <CheckCircle size={18} /> Settings saved successfully!
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
         <div>

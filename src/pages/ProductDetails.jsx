@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Minus, Plus, ShoppingCart, Heart, Share2, Star } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { products } from '../data/products';
+import { useStore } from '../context/StoreContext';
 import { useCart } from '../context/CartContext';
+import NotFound from './NotFound';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { products } = useStore();
   const [quantity, setQuantity] = useState(1);
 
-  // Find the product by ID or fallback to the first one (for demo purposes if ID not found)
-  const product = products.find(p => p.id === id) || products[0];
+  // Find the product by ID (do not fallback to [0] so we can show 404)
+  const product = products.find(p => p.id === id);
 
   const increase = () => setQuantity(q => q + 1);
   const decrease = () => setQuantity(q => q > 1 ? q - 1 : 1);
@@ -21,7 +23,7 @@ const ProductDetails = () => {
     // Optional: show toast or feedback
   };
 
-  if (!product) return <div className="pt-32 text-center text-2xl font-bold">Product not found</div>;
+  if (!product) return <NotFound />;
 
   return (
     <div className="pt-24 pb-16 min-h-screen bg-gray-50">

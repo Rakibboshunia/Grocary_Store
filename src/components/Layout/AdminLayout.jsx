@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, Users, Settings, LogOut, Menu, X, Bell, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import logoImg from '../../assets/images/logo.png';
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -25,8 +26,9 @@ const AdminLayout = () => {
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="flex items-center justify-between h-20 px-6 bg-transparent border-b border-white/5">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl font-black tracking-tight text-white drop-shadow-sm">DailyBasket<span className="text-emerald-400">.</span></span>
+          <Link to="/" className="flex items-center gap-2 px-2">
+            <img src={logoImg} alt="DailyBasket" className="h-8 w-auto drop-shadow-md brightness-0 invert" />
+            <span className="text-xl font-black tracking-tight text-white drop-shadow-sm">DailyBasket</span>
           </Link>
           <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-white">
             <X size={20} />

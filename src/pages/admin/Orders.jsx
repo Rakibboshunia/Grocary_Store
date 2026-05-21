@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { Search, CheckCircle, Clock, XCircle, ShoppingBag } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const statusConfig = {
   Delivered: { icon: CheckCircle, color: 'bg-emerald-50 text-emerald-600' },
@@ -12,12 +13,6 @@ const AdminOrders = () => {
   const { orders, updateOrderStatus } = useStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
-  const [toast, setToast] = useState(null);
-
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(() => setToast(null), 3000);
-  };
 
   const filtered = orders.filter(o => {
     const matchSearch = o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,13 +27,6 @@ const AdminOrders = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Toast */}
-      {toast && (
-        <div className="fixed top-6 right-6 z-[100] px-5 py-3.5 rounded-2xl shadow-xl text-sm font-bold text-white bg-emerald-600 flex items-center gap-2">
-          <CheckCircle size={18} /> {toast}
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
         <div>
@@ -128,7 +116,7 @@ const AdminOrders = () => {
                           value={order.status}
                           onChange={e => {
                             updateOrderStatus(order.id, e.target.value);
-                            showToast(`Order #${order.id} marked as ${e.target.value}.`);
+                            toast.success(`Order #${order.id} marked as ${e.target.value}.`);
                           }}
                           className="text-xs border border-slate-200 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500/50 bg-white font-bold text-slate-700 cursor-pointer shadow-sm"
                         >

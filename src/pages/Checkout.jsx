@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { CreditCard, Wallet, Truck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useStore } from '../context/StoreContext';
 
 const Checkout = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
+  const { addOrder } = useStore();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -16,10 +19,27 @@ const Checkout = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
+    // Get form data
+    const formData = new FormData(e.target);
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    
+    // Create new order object
+    const newOrder = {
+      id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
+      customerId: `C${Math.floor(100 + Math.random() * 900)}`, // Mock customer ID
+      customerName: `${firstName} ${lastName}`,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      amount: finalTotal,
+      status: 'Pending'
+    };
+    
     // Simulate API call for order processing
     setTimeout(() => {
+      addOrder(newOrder); // Add to admin dashboard!
       clearCart();
       setIsSubmitting(false);
+      toast.success('Order placed successfully!');
       navigate('/success');
     }, 1500);
   };
@@ -48,11 +68,11 @@ const Checkout = () => {
                 <form id="checkout-form" onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
-                    <input required type="text" className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="John" />
+                    <input name="firstName" required type="text" className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="John" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
-                    <input required type="text" className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Doe" />
+                    <input name="lastName" required type="text" className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Doe" />
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">Company Name (Optional)</label>

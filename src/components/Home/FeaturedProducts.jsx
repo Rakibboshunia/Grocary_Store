@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { ShoppingBag, Star, Plus, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { products } from "../../data/products";
+import { useStore } from "../../context/StoreContext";
 import { useCart } from "../../context/CartContext";
 
 const FeaturedProducts = () => {
   const { addToCart } = useCart();
+  const { products } = useStore();
   
   // Get first 4 products for featured or filter by a 'featured' flag if we add one.
   const featuredProductsList = products.slice(0, 4);

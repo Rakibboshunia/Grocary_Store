@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import AppLayout from "./components/Layout/AppLayout";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -11,6 +12,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import OrderSuccess from "./pages/OrderSuccess";
+import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import AdminRoute from "./components/Auth/AdminRoute";
 
@@ -52,6 +54,27 @@ const ScrollHandler = () => {
 function App() {
   return (
     <>
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#fff',
+            color: '#333',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+            borderRadius: '1rem',
+            padding: '12px 20px',
+            fontWeight: 'bold',
+            fontSize: '14px',
+          },
+          success: {
+            iconTheme: { primary: '#10B981', secondary: '#fff' },
+          },
+          error: {
+            iconTheme: { primary: '#EF4444', secondary: '#fff' },
+          },
+        }}
+      />
       <ScrollHandler />
       <Routes>
         
@@ -92,6 +115,7 @@ function App() {
             <OrderSuccess />
           </ProtectedRoute>
         } />
+        <Route path="*" element={<NotFound />} />
       </Route>
       </Routes>
     </>

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logoImg from '../assets/images/logo.png';
+import coverImg from '../assets/images/cover2.jpg';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
   const { login } = useAuth();
@@ -15,10 +17,9 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
 
     if (!email || !password) {
-      setError('Please fill in all fields');
+      toast.error('Please fill in all fields');
       return;
     }
 
@@ -28,7 +29,7 @@ const Login = () => {
     setTimeout(() => {
       // Basic mock check
       if (password.length < 6) {
-        setError('Invalid email or password');
+        toast.error('Invalid email or password');
         setIsLoading(false);
         return;
       }
@@ -44,8 +45,9 @@ const Login = () => {
       
       login(userData);
       setIsLoading(false);
-      navigate('/profile'); // Redirect to profile or home after login
-    }, 1000);
+      toast.success('Successfully logged in!');
+      navigate('/admin'); // Or wherever
+    }, 1500);
   };
 
   return (
@@ -55,11 +57,14 @@ const Login = () => {
         {/* Left Side - Image/Branding */}
         <div className="hidden md:block md:w-1/2 bg-green-600 relative overflow-hidden">
            <img 
-              src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800" 
+              src={coverImg} 
               alt="Grocery" 
               className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40"
            />
            <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 to-transparent"></div>
+           <div className="absolute top-8 left-8">
+             <img src={logoImg} alt="DailyBasket" className="h-10 w-auto brightness-0 invert drop-shadow-sm" />
+           </div>
            <div className="absolute bottom-12 left-12 right-12 text-white">
               <h2 className="text-4xl font-bold mb-4 leading-tight">Welcome Back to <br/> Freshness.</h2>
               <p className="text-green-100 text-lg">Sign in to reorder your favorites and manage your account.</p>
@@ -72,12 +77,6 @@ const Login = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back!</h1>
             <p className="text-gray-500">Please enter your details to sign in.</p>
           </div>
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-medium">
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -134,10 +133,19 @@ const Login = () => {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200 hover:shadow-lg mt-2"
+              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-500 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200 hover:shadow-lg mt-2"
             >
-              {isLoading ? 'Signing In...' : 'Sign In'}
-              {!isLoading && <ArrowRight size={18} />}
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span>Signing In...</span>
+                </div>
+              ) : (
+                <>
+                  <span>Sign In</span>
+                  <ArrowRight size={18} />
+                </>
+              )}
             </button>
           </form>
 

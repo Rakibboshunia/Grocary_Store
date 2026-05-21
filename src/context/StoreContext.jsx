@@ -21,7 +21,7 @@ const initialOrders = [
 
 export const StoreProvider = ({ children }) => {
   const [products, setProducts] = useState(() => {
-    const saved = localStorage.getItem('store_products');
+    const saved = localStorage.getItem('store_products_v2');
     return saved ? JSON.parse(saved) : initialProducts;
   });
 
@@ -36,7 +36,7 @@ export const StoreProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem('store_products', JSON.stringify(products));
+    localStorage.setItem('store_products_v2', JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {

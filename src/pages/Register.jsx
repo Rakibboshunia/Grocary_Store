@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logoImg from '../assets/images/logo.png';
+import coverImg from '../assets/images/cover2.jpg';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -10,7 +13,6 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
   const { login } = useAuth();
@@ -18,15 +20,14 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
     
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      toast.error('Password must be at least 6 characters');
       return;
     }
 
@@ -43,6 +44,7 @@ const Register = () => {
       
       login(userData);
       setIsLoading(false);
+      toast.success('Account created successfully!');
       navigate('/'); // Redirect to home after signup
     }, 1500);
   };
@@ -54,11 +56,14 @@ const Register = () => {
         {/* Left Side - Image/Branding */}
         <div className="hidden md:block md:w-1/2 bg-green-600 relative overflow-hidden">
            <img 
-              src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800" 
+              src={coverImg} 
               alt="Grocery" 
               className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40"
            />
            <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 to-transparent"></div>
+           <div className="absolute top-8 left-8">
+             <img src={logoImg} alt="DailyBasket" className="h-10 w-auto brightness-0 invert drop-shadow-sm" />
+           </div>
            <div className="absolute bottom-12 left-12 right-12 text-white">
               <h2 className="text-4xl font-bold mb-4 leading-tight">Join the Fresh <br/> Revolution.</h2>
               <p className="text-green-100 text-lg">Create an account to track your orders, save your favorites, and get exclusive deals.</p>
@@ -71,12 +76,6 @@ const Register = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Create an Account</h1>
             <p className="text-gray-500">Sign up to get started with your fresh grocery journey.</p>
           </div>
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-medium">
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -164,10 +163,19 @@ const Register = () => {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200 hover:shadow-lg mt-4"
+              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-500 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-green-200 hover:shadow-lg mt-4"
             >
-              {isLoading ? 'Creating Account...' : 'Sign Up'}
-              {!isLoading && <ArrowRight size={18} />}
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span>Creating Account...</span>
+                </div>
+              ) : (
+                <>
+                  <span>Sign Up</span>
+                  <ArrowRight size={18} />
+                </>
+              )}
             </button>
           </form>
 
