@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CreditCard, Wallet, Truck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
