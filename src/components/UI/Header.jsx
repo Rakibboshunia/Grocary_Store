@@ -1,11 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Menu, X, Search, User } from "lucide-react";
+import { ShoppingCart, Menu, X, User, Heart } from "lucide-react";
 import logoImg from "../../assets/images/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { cartCount } = useContext(CartContext);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -21,42 +26,54 @@ const Header = () => {
     >
       <div className="container-custom">
         <div className="flex justify-between items-center h-16">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center cursor-pointer"
-          >
-            <img src={logoImg} alt="DailyBasket" className="h-12 w-auto drop-shadow-sm" />
-          </motion.div>
+          <Link to="/" className="flex items-center cursor-pointer">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
+              <img src={logoImg} alt="DailyBasket" className="h-12 w-auto drop-shadow-sm" />
+            </motion.div>
+          </Link>
           
           <nav className="hidden md:flex gap-8 items-center bg-white/40 backdrop-blur-md px-8 py-3 rounded-full border border-white/50 shadow-sm">
-            {["Home", "Shop", "Deals", "Payment", "About"].map((item) => (
-              <a 
-                key={item}
-                href={`#${item.toLowerCase()}`} 
-                className="text-dark hover:text-primary font-semibold text-sm transition-colors relative group"
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            ))}
+            <NavLink to="/" end className={({isActive}) => `font-semibold text-sm transition-colors relative group ${isActive ? 'text-primary' : 'text-dark hover:text-primary'}`}>
+              Home
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:w-full"></span>
+            </NavLink>
+            <NavLink to="/products" className={({isActive}) => `font-semibold text-sm transition-colors relative group ${isActive ? 'text-primary' : 'text-dark hover:text-primary'}`}>
+              Products
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:w-full"></span>
+            </NavLink>
+            <NavLink to="/wishlist" className={({isActive}) => `font-semibold text-sm transition-colors relative group ${isActive ? 'text-primary' : 'text-dark hover:text-primary'}`}>
+              Wishlist
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary rounded-full transition-all duration-300 group-hover:w-full"></span>
+            </NavLink>
           </nav>
           
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="hidden md:flex items-center gap-4"
+            className="hidden md:flex items-center gap-3"
           >
-            <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-dark hover:text-primary hover:shadow-md transition-all border border-gray-100">
-              <Search size={18} />
-            </button>
-            <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-dark hover:text-primary hover:shadow-md transition-all border border-gray-100 relative">
+            <Link to="/wishlist" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-dark hover:text-red-500 hover:shadow-md transition-all border border-gray-100">
+              <Heart size={18} />
+            </Link>
+            <Link to="/cart" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-dark hover:text-primary hover:shadow-md transition-all border border-gray-100 relative">
               <ShoppingCart size={18} />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white">3</span>
-            </button>
-            <button className="hidden lg:flex items-center gap-2 bg-dark text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-primary transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-              <User size={16} /> Sign In
-            </button>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white">{cartCount}</span>
+              )}
+            </Link>
+            {user ? (
+              <Link to="/profile" className="hidden lg:flex items-center gap-2 bg-green-600 text-white px-4 py-2.5 rounded-full text-sm font-bold hover:bg-green-700 transition-colors shadow-lg">
+                <div className="w-5 h-5 rounded-full bg-white/30 flex items-center justify-center text-[10px] font-black">{user.name[0].toUpperCase()}</div>
+                {user.name.split(" ")[0]}
+              </Link>
+            ) : (
+              <Link to="/login" className="hidden lg:flex items-center gap-2 bg-dark text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-primary transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                <User size={16} /> Sign In
+              </Link>
+            )}
           </motion.div>
 
           {/* Mobile Menu Toggle */}
@@ -79,20 +96,20 @@ const Header = () => {
             className="md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 overflow-hidden shadow-2xl absolute w-full"
           >
             <div className="px-6 py-6 flex flex-col gap-4">
-              {["Home", "Shop", "Deals", "Payment", "About"].map((item) => (
-                <a 
-                  key={item}
-                  href={`#${item.toLowerCase()}`} 
-                  className="block text-lg font-bold text-dark hover:text-primary transition-colors py-2 border-b border-gray-100" 
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item}
-                </a>
-              ))}
-              <div className="flex justify-between items-center pt-4">
-                <button className="flex items-center justify-center gap-2 bg-dark text-white w-full py-3 rounded-xl font-bold">
-                  <User size={18} /> Account
-                </button>
+              <Link to="/" className="block text-lg font-bold text-dark hover:text-primary transition-colors py-2 border-b border-gray-100" onClick={() => setIsMenuOpen(false)}>Home</Link>
+              <Link to="/products" className="block text-lg font-bold text-dark hover:text-primary transition-colors py-2 border-b border-gray-100" onClick={() => setIsMenuOpen(false)}>Products</Link>
+              <Link to="/wishlist" className="block text-lg font-bold text-dark hover:text-primary transition-colors py-2 border-b border-gray-100" onClick={() => setIsMenuOpen(false)}>Wishlist</Link>
+              <Link to="/cart" className="block text-lg font-bold text-dark hover:text-primary transition-colors py-2 border-b border-gray-100" onClick={() => setIsMenuOpen(false)}>Cart ({cartCount})</Link>
+              <div className="pt-4">
+                {user ? (
+                  <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center justify-center gap-2 bg-green-600 text-white w-full py-3 rounded-xl font-bold">
+                    <User size={18} /> {user.name.split(" ")[0]}'s Profile
+                  </Link>
+                ) : (
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)} className="flex items-center justify-center gap-2 bg-dark text-white w-full py-3 rounded-xl font-bold">
+                    <User size={18} /> Sign In
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>

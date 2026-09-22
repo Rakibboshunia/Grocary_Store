@@ -3,16 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
   }
-  
+
   body {
     @apply font-sans bg-light text-dark antialiased;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }
 
@@ -20,8 +33,13 @@
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
+
   .btn-primary {
     @apply inline-block bg-primary text-white py-3 px-8 rounded-full font-semibold transition-all duration-300 hover:bg-green-700 hover:shadow-lg transform hover:-translate-y-1;
+  }
+
+  /* Give all pages top padding to avoid content hiding behind the fixed header */
+  main {
+    padding-top: 80px;
   }
 }
