@@ -27,6 +27,7 @@ const OrderSuccess = () => {
               <Package size={18} />
               <span className="font-medium">Order ID</span>
             </div>
+            
             <span className="font-bold text-green-600 font-mono text-sm">{orderId}</span>
           </div>
           <div className="flex items-center justify-between border-t border-gray-200 pt-4">
