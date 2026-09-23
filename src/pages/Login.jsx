@@ -48,6 +48,7 @@ const Login = () => {
               />
             </div>
           </div>
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <div className="relative">
@@ -62,6 +63,7 @@ const Login = () => {
               </button>
             </div>
           </div>
+          
           <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white py-3.5 rounded-xl font-bold text-lg shadow-md hover:shadow-lg transition-all">
             Sign In
           </button>
