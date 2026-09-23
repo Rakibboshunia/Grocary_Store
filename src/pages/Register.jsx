@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -52,6 +53,7 @@ const Register = () => {
               <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="John Doe" required className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none transition" />
             </div>
           </div>
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
             <div className="relative">
@@ -69,6 +71,7 @@ const Register = () => {
               </button>
             </div>
           </div>
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
             <div className="relative">
