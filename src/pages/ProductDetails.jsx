@@ -11,6 +11,11 @@ const ProductDetails = () => {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [reviews, setReviews] = useState([
+    { id: 1, name: "John Doe", rating: 5, comment: "Great quality, highly recommended!" },
+    { id: 2, name: "Jane Smith", rating: 4, comment: "Very fresh but a bit pricey." }
+  ]);
+  const [newReview, setNewReview] = useState({ name: "", rating: 5, comment: "" });
 
   const inWishlist = isInWishlist(parseInt(id));
 
@@ -36,6 +41,16 @@ const ProductDetails = () => {
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
+
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    if (newReview.name && newReview.comment) {
+      setReviews([...reviews, { id: Date.now(), ...newReview }]);
+      setNewReview({ name: "", rating: 5, comment: "" });
+    }
+  };
+
+  const averageRating = reviews.length ? (reviews.reduce((acc, rev) => acc + rev.rating, 0) / reviews.length).toFixed(1) : 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -67,10 +82,11 @@ const ProductDetails = () => {
             <div className="flex items-center gap-2 mb-6">
               <div className="flex text-yellow-400">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={18} fill={i < 4 ? "currentColor" : "none"} />
+                  <Star key={i} size={18} fill={i < Math.round(averageRating) ? "currentColor" : "none"} />
                 ))}
               </div>
-              <span className="text-gray-500 text-sm">(24 Reviews)</span>
+              <span className="font-bold text-gray-700">{averageRating}</span>
+              <span className="text-gray-500 text-sm">({reviews.length} Reviews)</span>
             </div>
             
             <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-5 md:mb-8 border-b border-gray-100 pb-5 md:pb-8">
@@ -123,6 +139,82 @@ const ProductDetails = () => {
                 )}
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-12 bg-white rounded-2xl shadow-lg p-6 md:p-10">
+        <h2 className="text-2xl font-bold text-gray-900 mb-8">Customer Reviews</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div>
+            <h3 className="text-xl font-semibold mb-6">Reviews ({reviews.length})</h3>
+            {reviews.length === 0 ? (
+              <p className="text-gray-500">No reviews yet. Be the first to review this product!</p>
+            ) : (
+              <div className="space-y-6">
+                {reviews.map(review => (
+                  <div key={review.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-bold text-gray-800">{review.name}</h4>
+                      <div className="flex text-yellow-400">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} size={14} fill={i < review.rating ? "currentColor" : "none"} />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-gray-600 text-sm">{review.comment}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-6">Write a Review</h3>
+            <form onSubmit={handleReviewSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 outline-none"
+                  value={newReview.name}
+                  onChange={(e) => setNewReview({...newReview, name: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 outline-none bg-white"
+                  value={newReview.rating}
+                  onChange={(e) => setNewReview({...newReview, rating: Number(e.target.value)})}
+                >
+                  <option value={5}>5 Stars - Excellent</option>
+                  <option value={4}>4 Stars - Good</option>
+                  <option value={3}>3 Stars - Average</option>
+                  <option value={2}>2 Stars - Poor</option>
+                  <option value={1}>1 Star - Terrible</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
+                <textarea
+                  required
+                  rows={4}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 outline-none resize-none"
+                  value={newReview.comment}
+                  onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                className="bg-gray-900 text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors w-full md:w-auto"
+              >
+                Submit Review
+              </button>
+            </form>
           </div>
         </div>
       </div>

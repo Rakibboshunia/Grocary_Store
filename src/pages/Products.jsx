@@ -9,16 +9,25 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("default");
+  const [maxPrice, setMaxPrice] = useState(20);
 
   const categories = ["All", ...new Set(productsData.map(p => p.category))];
 
   const filteredProducts = useMemo(() => {
-    return productsData.filter(product => {
+    let result = productsData.filter(product => {
       const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+      const matchesPrice = product.price <= maxPrice;
+      return matchesCategory && matchesSearch && matchesPrice;
     });
-  }, [selectedCategory, searchQuery]);
+
+    if (sortBy === "price-asc") result.sort((a, b) => a.price - b.price);
+    else if (sortBy === "price-desc") result.sort((a, b) => b.price - a.price);
+    else if (sortBy === "name-asc") result.sort((a, b) => a.name.localeCompare(b.name));
+
+    return result;
+  }, [selectedCategory, searchQuery, sortBy, maxPrice]);
 
   const FilterContent = () => (
     <>
@@ -31,6 +40,30 @@ const Products = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+      </div>
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">Max Price: ${maxPrice}</label>
+        <input
+          type="range"
+          min="1"
+          max="50"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(Number(e.target.value))}
+          className="w-full accent-green-600"
+        />
+      </div>
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none bg-white"
+        >
+          <option value="default">Default</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name: A to Z</option>
+        </select>
       </div>
       <div>
         <h3 className="font-semibold text-gray-700 mb-3">Categories</h3>

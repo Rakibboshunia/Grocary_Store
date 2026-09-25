@@ -2,7 +2,14 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
-import { User, ShoppingBag, Heart, LogOut, ShoppingCart, Settings } from "lucide-react";
+import { User, ShoppingBag, Heart, LogOut, ShoppingCart, Settings, Package, ChevronRight } from "lucide-react";
+
+// Mock order history data
+const mockOrders = [
+  { id: "ORD-1029", date: "2023-10-15", total: 45.98, status: "Delivered", items: 3 },
+  { id: "ORD-1035", date: "2023-10-22", total: 12.50, status: "Shipped", items: 1 },
+  { id: "ORD-1041", date: "2023-10-25", total: 89.99, status: "Processing", items: 5 },
+];
 
 const Profile = () => {
   const { user, logout } = useAuth();
@@ -87,6 +94,50 @@ const Profile = () => {
                 </Link>
               ))}
             </div>
+          </div>
+
+          {/* Order History */}
+          <div className="bg-white rounded-2xl shadow-md p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-gray-700 text-sm uppercase tracking-wider">Recent Orders</h3>
+              <button className="text-sm text-green-600 hover:underline font-medium">View All</button>
+            </div>
+            
+            {mockOrders.length === 0 ? (
+              <p className="text-gray-500 text-center py-4">No recent orders found.</p>
+            ) : (
+              <div className="space-y-4">
+                {mockOrders.map((order) => (
+                  <div key={order.id} className="border border-gray-100 rounded-xl p-4 hover:border-green-200 hover:shadow-sm transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-gray-400">
+                        <Package size={20} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-gray-900">{order.id}</h4>
+                        <p className="text-xs text-gray-500">{order.date} • {order.items} Items</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between sm:justify-end gap-4 sm:w-1/2">
+                      <div className="text-right">
+                        <p className="font-bold text-gray-900">${order.total.toFixed(2)}</p>
+                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                          order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
+                          order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
+                          'bg-yellow-100 text-yellow-700'
+                        }`}>
+                          {order.status}
+                        </span>
+                      </div>
+                      <button className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-green-50 group-hover:text-green-600 transition-colors">
+                        <ChevronRight size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
